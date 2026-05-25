@@ -1,0 +1,3 @@
+GEEN BEKENDE PLACEHOLDERS MEER
+
+Alle gamewoorden hebben nu een gekoppelde PNG. Sommige beelden kunnen later nog esthetisch verfijnd worden, maar er zouden geen lege placeholders meer moeten zitten.

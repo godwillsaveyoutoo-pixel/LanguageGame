@@ -1,0 +1,13 @@
+AL AANWEZIGE WOORD-PNGs
+
+[basis]
+- assets/words/basis/adlaw.png
+- assets/words/basis/balay.png
+- assets/words/basis/bukid.png
+- assets/words/basis/bulan.png
+- assets/words/basis/dagat.png
+- assets/words/basis/kalayo.png
+- assets/words/basis/lamesa.png
+- assets/words/basis/lingkuranan.png
+- assets/words/basis/pultahan.png
+- assets/words/basis/tubig.png

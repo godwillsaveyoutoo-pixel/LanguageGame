@@ -1,0 +1,5 @@
+OPTIONELE TOEKOMSTIGE POLISH
+
+- visuele stijl van sommige zinbeelden nog consistenter maken
+- napulo.png eventueel vervangen door een exactere tien-sterrenafbeelding
+- extra UI-feedback-assets maken: bubble_correct.png, bubble_wrong.png, bubble_hint.png

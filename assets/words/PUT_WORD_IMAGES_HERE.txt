@@ -1,0 +1,2 @@
+Zet hier woordafbeeldingen, bv. adlaw.png, balay.png, tubig.png.
+De game zoekt eerst gifs/<woord>.gif, daarna assets/words/<woord>.png, daarna images/<woord>.png.

@@ -1,0 +1,2 @@
+Zet hier je Cebuano mp3-bestanden, bv. adlaw.mp3, Adlaw.mp3, asa_ka.mp3.
+De game probeert lowercase, uppercase eerste letter, Title_Case en .mp3/.wav.
