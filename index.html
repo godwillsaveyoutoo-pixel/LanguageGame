@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="nl">
+<!DOCTYPE html><html lang="nl">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Cebuano Bubble Pop — Preview Style</title>
+<title>Cebuano Bubble Pop — Anti-overlap versie</title>
 <style>
   :root{
     --ink:#142348;
@@ -28,13 +27,259 @@
       linear-gradient(180deg,#fffdf8,#fbf4e9);
   }
   #phone.fullscreen{
-    position:fixed;
-    inset:0;
-    width:100vw !important;
-    height:100vh !important;
-    max-height:none !important;
-    border-radius:0 !important;
-    box-shadow:none !important;
+    position:fixed;inset:0;width:100vw!important;height:100vh!important;max-height:none!important;
+    border-radius:0!important;box-shadow:none!important;margin:0;
+  }.hud{ position:absolute;z-index:30;left:14px;right:14px;top:calc(12px + env(safe-area-inset-top,0px)); display:grid;grid-template-columns:1.15fr .9fr .9fr;gap:8px; } .hudPill{ min-height:48px;border-radius:999px;background:rgba(255,255,255,.82); border:1px solid rgba(255,255,255,.96);box-shadow:var(--softShadow); display:flex;align-items:center;justify-content:center;gap:6px;font-weight:900;font-size:15px; padding:0 10px;white-space:nowrap; } .levelPill{color:#5a39a0}.scorePill{color:#bd7d13}.roundPill{color:#2d9351}
+
+.targetCard{ position:absolute;z-index:20;left:38px;right:38px;top:calc(72px + env(safe-area-inset-top,0px)); min-height:162px;border-radius:32px;background:rgba(255,255,255,.90); border:1px solid rgba(255,255,255,.96);box-shadow:var(--shadow); display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 16px;text-align:center; } .targetText{font-size:12px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.04em} .targetWord{ font-size:37px;font-weight:950;color:#172344;line-height:1.08;margin:5px 0 3px;letter-spacing:-.03em; max-width:100%;overflow:hidden;text-overflow:ellipsis; } .targetWord.long{font-size:28px;line-height:1.1} .targetSub{font-size:13px;color:#51617d;font-weight:760;min-height:18px;line-height:1.22} .targetMeta{margin-top:4px;font-size:11px;color:#7a879b;font-weight:800;max-width:96%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .audioRow{display:flex;gap:8px;margin-top:8px;align-items:center;justify-content:center} .audioBtn{ border:0;min-height:42px;min-width:48px;border-radius:999px;font-weight:900; box-shadow:0 8px 18px rgba(61,137,238,.18);background:linear-gradient(180deg,#86caff,#4ca0ef); color:#fff;font-size:22px; }
+
+.progressWrap{ position:absolute;z-index:21;left:42px;right:42px;top:calc(238px + env(safe-area-inset-top,0px)); height:10px;border-radius:999px;background:rgba(255,255,255,.75); box-shadow:inset 0 0 0 1px rgba(75,150,235,.10);overflow:hidden; } .progressBar{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,#69b2ff,#6ecf59);transition:width .25s ease}
+
+.playPanel{ position:absolute;z-index:2;left:18px;right:18px;top:calc(260px + env(safe-area-inset-top,0px)); bottom:calc(18px + env(safe-area-inset-bottom,0px)); border-radius:34px;overflow:hidden; background: radial-gradient(circle at 36% 15%,rgba(255,255,255,.50),transparent 18%), radial-gradient(circle at 75% 85%,rgba(120,221,174,.20),transparent 25%), radial-gradient(circle at 16% 90%,rgba(165,141,240,.20),transparent 23%), linear-gradient(180deg,rgba(206,244,255,.75),rgba(207,239,242,.58)); border:2px solid rgba(115,202,238,.55); box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.8); } .playPanel:before{ content:"";position:absolute;inset:0; background: radial-gradient(circle at 43% 11%,rgba(255,255,255,.55) 0 4px,transparent 5px), radial-gradient(circle at 89% 18%,rgba(255,255,255,.55) 0 10px,transparent 11px), radial-gradient(circle at 68% 53%,rgba(255,255,255,.42) 0 12px,transparent 13px); pointer-events:none; }
+
+.bubble{ position:absolute;border:0;padding:0;background:transparent;border-radius:999px; width:104px;height:104px;display:flex;align-items:center;justify-content:center; will-change:transform;transition:filter .15s ease,opacity .2s ease,transform .18s ease; } .bubbleOrb{ position:absolute;inset:0;border-radius:999px; background: radial-gradient(circle at 28% 22%,rgba(255,255,255,.95) 0 9%,rgba(255,255,255,.15) 10% 18%,transparent 19%), radial-gradient(circle at 38% 35%,rgba(255,255,255,.33),transparent 45%), var(--tint); border:3px solid var(--ring); box-shadow:0 18px 30px rgba(20,35,72,.13),inset 0 4px 10px rgba(255,255,255,.72),inset 0 -12px 18px rgba(255,255,255,.28); opacity:.93; } .bubbleInner{ position:relative;z-index:2;width:82%;height:82%;display:flex;align-items:center;justify-content:center; flex-direction:column;gap:4px;text-align:center; } .bubbleEmoji{font-size:43px;line-height:1;animation:floaty 1.8s ease-in-out infinite;filter:drop-shadow(0 2px 2px rgba(20,35,72,.12))} .bubbleText{font-size:16px;line-height:1.05;font-weight:950;color:#213b61;max-width:90px;overflow:hidden;text-overflow:ellipsis} .bubbleText.long{font-size:11px;line-height:1.12;max-width:90px} .bubble.correct .bubbleOrb{animation:pop .42s ease forwards;background:rgba(207,248,223,.95);border-color:rgba(62,194,112,.9)} .bubble.wrong .bubbleOrb{animation:shake .28s ease;background:rgba(255,226,226,.94);border-color:rgba(220,74,74,.55)} .bubble.faded{opacity:.25;pointer-events:none}
+
+.footer{ position:absolute;z-index:28;right:18px;bottom:calc(24px + env(safe-area-inset-bottom,0px)); display:flex;gap:8px;align-items:center; } .menuBtn,.skipBtn{border:0;min-height:44px;min-width:74px;border-radius:999px;font-size:16px;font-weight:900} .menuBtn{background:rgba(255,255,255,.78);color:#244064;box-shadow:0 8px 16px rgba(20,35,72,.09)} .skipBtn{background:linear-gradient(180deg,#86caff,#4ca0ef);color:white;box-shadow:0 8px 16px rgba(61,137,238,.24)}
+
+.toast{ position:absolute;z-index:50;left:50%;top:56%;transform:translate(-50%,-50%) scale(.9); opacity:0;pointer-events:none;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.96); border-radius:999px;padding:12px 18px;box-shadow:0 18px 38px rgba(20,35,72,.14); font-size:20px;font-weight:950;text-align:center;max-width:90%; } .toast.show{animation:toast .68s ease forwards}
+
+.overlay{ position:absolute;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:18px; background: radial-gradient(circle at 18% 16%,rgba(110,168,255,.14),transparent 26%), radial-gradient(circle at 84% 18%,rgba(255,184,132,.14),transparent 22%), rgba(251,247,238,.78); backdrop-filter:blur(8px); } .panel{ width:100%;max-width:408px;border-radius:34px;background:rgba(255,255,255,.95); border:1px solid rgba(255,255,255,.95);box-shadow:var(--shadow);padding:23px 20px;text-align:center; max-height:95vh;overflow:auto; } .panel h1{margin:0 0 8px;color:#1669b4;font-size:32px;font-weight:950;letter-spacing:-.05em} .panel p{margin:0 0 14px;color:#647184;font-size:14px;line-height:1.38;font-weight:600} .topicGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 0 14px} .topicBtn{ width:100%;min-height:52px;border:0;border-radius:18px;background:rgba(235,244,255,.92);color:#244064; font-size:14px;font-weight:900;text-align:center;padding:8px 10px;display:flex;align-items:center;justify-content:center; box-shadow:inset 0 0 0 2px rgba(75,150,235,.10); } .topicBtn.active{background:linear-gradient(180deg,#fff4bf,#ffd667);color:#7b5412;box-shadow:0 10px 18px rgba(204,143,26,.16)} .selectRow{display:grid;grid-template-columns:1fr;gap:8px;margin:0 0 12px} .selectBox{ border:0;border-radius:18px;background:rgba(235,244,255,.92);color:#244064;font-size:14px;font-weight:900; padding:12px;box-shadow:inset 0 0 0 2px rgba(75,150,235,.10); } .smallNote{font-size:12px;color:#68788e;font-weight:700;margin-top:10px;line-height:1.25} .bigBtn{ width:100%;min-height:56px;border:0;border-radius:22px;background:linear-gradient(180deg,#69b2ff,#3d89ee); color:white;font-size:17px;font-weight:900;box-shadow:0 14px 24px rgba(61,137,238,.26); } .hidden{display:none!important}
+
+@keyframes pop{0%{transform:scale(1);opacity:1}45%{transform:scale(1.15);opacity:1}100%{transform:scale(.12);opacity:0}} @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}} @keyframes toast{0%{opacity:0;transform:translate(-50%,-42%) scale(.86)}22%{opacity:1;transform:translate(-50%,-52%) scale(1.04)}72%{opacity:1;transform:translate(-50%,-64%) scale(1)}100%{opacity:0;transform:translate(-50%,-56%) scale(.96)}} @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+@media (hover:hover){ .bubble:hover{transform:translateY(-4px) scale(1.035);filter:brightness(1.04);cursor:pointer} .topicBtn:hover,.bigBtn:hover,.menuBtn:hover,.skipBtn:hover,.audioBtn:hover,.selectBox:hover{transform:translateY(-2px);filter:brightness(1.035);cursor:pointer} }
+
+@media(max-height:740px){ .hud{top:calc(8px + env(safe-area-inset-top,0px));left:10px;right:10px;gap:6px} .hudPill{min-height:42px;font-size:13px} .targetCard{top:calc(58px + env(safe-area-inset-top,0px));min-height:142px;left:34px;right:34px} .targetWord{font-size:30px}.targetWord.long{font-size:23px} .progressWrap{top:calc(212px + env(safe-area-inset-top,0px));left:36px;right:36px} .playPanel{top:calc(230px + env(safe-area-inset-top,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px))} .bubble{width:88px;height:88px} .bubbleEmoji{font-size:35px}.bubbleText{font-size:13px}.bubbleText.long{font-size:10px} .footer{bottom:calc(16px + env(safe-area-inset-bottom,0px))} .menuBtn,.skipBtn{min-height:40px;min-width:68px;font-size:14px} }
+
+@media(min-width:700px){ #phone{height:min(94vh,960px);border-radius:34px;box-shadow:0 20px 80px rgba(20,35,72,.12)} } </style>
+
+</head>
+<body>
+<div id="app"><div id="phone">
+  <div class="hud">
+    <div class="hudPill levelPill"><span id="levelText">Level 1</span></div>
+    <div class="hudPill scorePill"><span id="scoreText">0 ⭐</span></div>
+    <div class="hudPill roundPill"><span id="roundText">0/12</span></div>
+  </div>  <div class="targetCard">
+    <div class="targetText" id="targetText">Luister en kies</div>
+    <div class="targetWord" id="targetWord">balay</div>
+    <div class="targetSub" id="targetSub">Kies de juiste bubbel</div>
+    <div class="targetMeta" id="targetMeta">Klaar!</div>
+    <div class="audioRow">
+      <button class="audioBtn" id="speakBtn" type="button">🔊</button>
+    </div>
+  </div>  <div class="progressWrap"><div class="progressBar" id="progressBar"></div></div>
+  <div class="playPanel" id="stage"></div>  <div class="footer">
+    <button class="menuBtn" id="menuBtn" type="button">Menu</button>
+    <button class="skipBtn" id="skipBtn" type="button">Skip</button>
+  </div>  <div class="toast" id="toast">Goed! 🎉</div>  <div class="overlay" id="startOverlay">
+    <div class="panel">
+      <h1>Cebuano Bubble Pop</h1>
+      <p>Luister naar een woord en kies de juiste bubbel. Audio van je audiobestanden!</p>
+      <div class="topicGrid" id="topicGrid">
+        <button class="topicBtn active" type="button" data-topic="mixed">🎲 Mix</button>
+        <button class="topicBtn" type="button" data-topic="basis">🌍 Basis</button>
+        <button class="topicBtn" type="button" data-topic="familie">👨‍👩‍👧 Familie</button>
+        <button class="topicBtn" type="button" data-topic="eten">🍚 Eten</button>
+        <button class="topicBtn" type="button" data-topic="dagelijks">🚶 Dagelijks</button>
+        <button class="topicBtn" type="button" data-topic="gevoel">😊 Gevoel</button>
+        <button class="topicBtn" type="button" data-topic="getallen">🔢 Getallen</button>
+        <button class="topicBtn" type="button" data-topic="zinnen">💬 Zinnen</button>
+      </div>
+      <div class="selectRow">
+        <select class="selectBox" id="roundsSel" aria-label="Aantal rondes">
+          <option value="12" selected>12 rondes</option>
+          <option value="18">18 rondes</option>
+          <option value="30">30 rondes</option>
+        </select>
+      </div>
+      <button class="bigBtn" id="startBtn" type="button">Start</button>
+      <div class="smallNote">Audio-bestanden in <strong>audio/</strong> map. Ondersteunt zowel <strong>Uppercase.wav</strong> als <strong>lowercase.wav</strong>.</div>
+    </div>
+  </div>  <div class="overlay hidden" id="endOverlay">
+    <div class="panel">
+      <h1 id="endTitle">Klaar! 🎉</h1>
+      <p id="endText"></p>
+      <button class="bigBtn" id="restartBtn" type="button">Opnieuw</button>
+    </div>
+  </div>
+</div></div><script>
+(() => {
+  const WORDS=[
+    {nl:"huis",ceb:"balay",cat:"basis",emoji:"🏠"},
+    {nl:"water",ceb:"tubig",cat:"basis",emoji:"💧"},
+    {nl:"vuur",ceb:"kalayo",cat:"basis",emoji:"🔥"},
+    {nl:"zon",ceb:"adlaw",cat:"basis",emoji:"☀️"},
+    {nl:"maan",ceb:"bulan",cat:"basis",emoji:"🌙"},
+    {nl:"zee",ceb:"dagat",cat:"basis",emoji:"🌊"},
+    {nl:"berg",ceb:"bukid",cat:"basis",emoji:"⛰️"},
+    {nl:"weg",ceb:"dalan",cat:"basis",emoji:"🛣️"},
+    {nl:"deur",ceb:"pultahan",cat:"basis",emoji:"🚪"},
+    {nl:"tafel",ceb:"lamesa",cat:"basis",emoji:"🍽️"},
+    {nl:"stoel",ceb:"lingkuranan",cat:"basis",emoji:"🪑"},
+    {nl:"kamer",ceb:"kwarto",cat:"basis",emoji:"🛏️"},
+    {nl:"geld",ceb:"kwarta",cat:"basis",emoji:"💰"},
+    {nl:"tijd",ceb:"oras",cat:"basis",emoji:"🕒"},
+
+    {nl:"moeder",ceb:"inahan",cat:"familie",emoji:"👩"},
+    {nl:"vader",ceb:"amahan",cat:"familie",emoji:"👨"},
+    {nl:"kind",ceb:"bata",cat:"familie",emoji:"👶"},
+    {nl:"tante",ceb:"tiya",cat:"familie",emoji:"👩"},
+    {nl:"oom",ceb:"tiyo",cat:"familie",emoji:"👨"},
+    {nl:"broer/zus",ceb:"igsoon",cat:"familie",emoji:"👧"},
+    {nl:"opa/oma",ceb:"apohan",cat:"familie",emoji:"👴"},
+
+    {nl:"brood",ceb:"tinapay",cat:"eten",emoji:"🍞"},
+    {nl:"rijst",ceb:"bugas",cat:"eten",emoji:"🍚"},
+    {nl:"ei",ceb:"itlog",cat:"eten",emoji:"🥚"},
+    {nl:"vis",ceb:"isda",cat:"eten",emoji:"🐟"},
+    {nl:"banaan",ceb:"saging",cat:"eten",emoji:"🍌"},
+    {nl:"mango",ceb:"mangga",cat:"eten",emoji:"🥭"},
+    {nl:"melk",ceb:"gatas",cat:"eten",emoji:"🥛"},
+
+    {nl:"gaan",ceb:"adto",cat:"dagelijks",emoji:"🚶"},
+    {nl:"komen",ceb:"anhi",cat:"dagelijks",emoji:"👋"},
+    {nl:"eten",ceb:"kaon",cat:"dagelijks",emoji:"🍽️"},
+    {nl:"drinken",ceb:"inom",cat:"dagelijks",emoji:"🥤"},
+    {nl:"slapen",ceb:"tulog",cat:"dagelijks",emoji:"😴"},
+    {nl:"kijken",ceb:"tan-aw",cat:"dagelijks",emoji:"👀"},
+    {nl:"luisteren",ceb:"paminaw",cat:"dagelijks",emoji:"👂"},
+
+    {nl:"vrolijk",ceb:"lipay",cat:"gevoel",emoji:"😊"},
+    {nl:"verdrietig",ceb:"guol",cat:"gevoel",emoji:"😢"},
+    {nl:"bang",ceb:"hadlok",cat:"gevoel",emoji:"😨"},
+    {nl:"dorst",ceb:"uhaw",cat:"gevoel",emoji:"🥵"},
+    {nl:"honger",ceb:"gutom",cat:"gevoel",emoji:"😋"},
+    {nl:"moe",ceb:"kapoy",cat:"gevoel",emoji:"😴"},
+
+    {nl:"een",ceb:"usa",cat:"getallen",emoji:"1️⃣"},
+    {nl:"twee",ceb:"duha",cat:"getallen",emoji:"2️⃣"},
+    {nl:"drie",ceb:"tulo",cat:"getallen",emoji:"3️⃣"},
+    {nl:"vier",ceb:"upat",cat:"getallen",emoji:"4️⃣"},
+    {nl:"vijf",ceb:"lima",cat:"getallen",emoji:"5️⃣"},
+    {nl:"zes",ceb:"unom",cat:"getallen",emoji:"6️⃣"},
+    {nl:"zeven",ceb:"pito",cat:"getallen",emoji:"7️⃣"},
+    {nl:"acht",ceb:"walo",cat:"getallen",emoji:"8️⃣"},
+    {nl:"negen",ceb:"siyam",cat:"getallen",emoji:"9️⃣"},
+    {nl:"tien",ceb:"napulo",cat:"getallen",emoji:"🔟"},
+
+    {nl:"Goedemorgen",ceb:"Maayong buntag",cat:"zinnen",emoji:"🌅"},
+    {nl:"Dank je",ceb:"Salamat",cat:"zinnen",emoji:"🙏"},
+    {nl:"Hoe gaat het?",ceb:"Kumusta?",cat:"zinnen",emoji:"💬"},
+    {nl:"Ik hou van jou",ceb:"Gihigugma tika",cat:"zinnen",emoji:"❤️"},
+    {nl:"Ik begrijp het",ceb:"Kasabot ko",cat:"zinnen",emoji:"👍"},
+    {nl:"Ik weet het niet",ceb:"Wala ko kahibalo",cat:"zinnen",emoji:"🤷"}
+  ];
+
+  const phone=document.getElementById('phone');
+  let lastTapTime=0;
+  const tapDelay=300;
+
+  phone.addEventListener('dblclick',()=>{
+    phone.classList.toggle('fullscreen');
+    if(phone.requestFullscreen){phone.requestFullscreen().catch(()=>{});}
+  });
+
+  phone.addEventListener('touchend',()=>{
+    const currentTime=new Date().getTime();
+    const tapLength=currentTime-lastTapTime;
+    if(tapLength<tapDelay&&tapLength>0){
+      phone.classList.toggle('fullscreen');
+      if(phone.requestFullscreen){phone.requestFullscreen().catch(()=>{});}
+    }
+    lastTapTime=currentTime;
+  });
+
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='Escape'&&phone.classList.contains('fullscreen')){
+      phone.classList.remove('fullscreen');
+      if(document.fullscreenElement){document.exitFullscreen();}
+    }
+  });
+
+  const app={
+    words:WORDS,
+    currentWord:null,
+    score:0,
+    round:0,
+    maxRounds:12,
+    selectedTopic:'mixed',
+    currentAudio:null,
+    locked:false,
+
+    init(){
+      this.attachEventListeners();
+      this.showStartScreen();
+      this.updateHUD(true);
+    },
+
+    attachEventListeners(){
+      document.getElementById('startBtn').addEventListener('click',()=>this.startGame());
+      document.getElementById('restartBtn').addEventListener('click',()=>{
+        document.getElementById('endOverlay').classList.add('hidden');
+        this.showStartScreen();
+      });
+      document.getElementById('menuBtn').addEventListener('click',()=>{
+        document.getElementById('endOverlay').classList.add('hidden');
+        this.showStartScreen();
+      });
+      document.getElementById('skipBtn').addEventListener('click',()=>this.nextRound());
+      document.getElementById('speakBtn').addEventListener('click',()=>this.playAudio());
+      document.querySelectorAll('.topicBtn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          document.querySelectorAll('.topicBtn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          this.selectedTopic=btn.dataset.topic;
+        });
+      });
+      document.getElementById('roundsSel').addEventListener('change',(e)=>{
+        this.maxRounds=parseInt(e.target.value,10);
+      });
+      window.addEventListener('resize',()=>{
+        if(this.currentWord && document.getElementById('startOverlay').classList.contains('hidden') && document.getElementById('endOverlay').classList.contains('hidden')){
+          this.generateChoices();
+        }
+      });
+    },
+
+    showStartScreen(){
+      document.getElementById('startOverlay').classList.remove('hidden');
+    },
+
+    startGame(){
+      document.getElementById('startOverlay').classList.add('hidden');
+      document.getElementById('endOverlay').classList.add('hidden');
+      this.round=0;
+      this.score=0;
+      this.locked=false;
+      this.nextRound();
+    },
+
+    getAvailableWords(){
+      const list=this.selectedTopic==='mixed' ? this.words : this.words.filter(w=>w.cat===this.selectedTopic);
+      return list.length ? list : this.words;
+    },
+
+    nextRound(){
+      if(this.currentAudio){
+        this.currentAudio.pause();
+        this.currentAudio=null;
+      }
+      this.locked=false;
+      this.round++;
+      if(this.round>this.maxRounds){
+        this.endGame();
+        return;
+      }
+      const available=this.getAvailableWords();
+      this.currentWord=available[Math.floor(Math.random()*available.length)];
+      this.updateHUD();
+      this.generateChoices();
+      setTimeout(()=>this.playAudio(),250);
+    },
+
+    updateHUD(initial=false){
+      document.getElementById('roundText').textContent=`${th    box-shadow:none !important;
     margin:0;
   }
   .hud{
