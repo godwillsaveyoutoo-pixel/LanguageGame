@@ -1015,7 +1015,7 @@
 
   const phone = document.getElementById('phone');
   let lastTapTime = 0;
-  const tapDelay = 300; // milliseconds between taps to count as double tap
+  const tapDelay = 300;
 
   // Double tap to fullscreen
   phone.addEventListener('dblclick', () => {
@@ -1033,7 +1033,6 @@
     const tapLength = currentTime - lastTapTime;
     
     if (tapLength < tapDelay && tapLength > 0) {
-      // Double tap detected
       phone.classList.toggle('fullscreen');
       if (phone.requestFullscreen) {
         phone.requestFullscreen().catch(err => {
@@ -1055,7 +1054,6 @@
     }
   });
 
-  // Game logic continues...
   const app = {
     words: WORDS,
     currentWord: null,
@@ -1183,6 +1181,11 @@
     },
 
     speak() {
+      // Try both uppercase and lowercase versions of the audio file
+      const lowerCeb = this.currentWord.ceb.toLowerCase();
+      const upperCeb = this.currentWord.ceb.charAt(0).toUpperCase() + this.currentWord.ceb.slice(1).toLowerCase();
+      
+      // For text-to-speech
       const utterance = new SpeechSynthesisUtterance(this.currentWord.ceb);
       utterance.lang = 'ceb-PH';
       speechSynthesis.cancel();
